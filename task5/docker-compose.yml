@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  back-end:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    volumes:
+      - ./back-end:/app
+    container_name: back-end
+
+  front-end:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    volumes:
+      - ./front-end:/var/www/html
+    container_name: front-end
+
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    image: softy-pinko-proxy:task5
+    ports:
+      - "80:80"  # Exposer le port 80 pour les requêtes HTTP externes
+    depends_on:
+      - front-end
+      - back-end
+    container_name: proxy
